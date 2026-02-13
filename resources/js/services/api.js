@@ -26,8 +26,13 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Session expired — redirect to login
-      window.location.href = '/login';
+      // Only redirect if we're not already on the login page
+      // and this isn't the initial user fetch
+      const currentPath = window.location.pathname;
+      if (currentPath !== '/login' && !error.config.url.includes('/user')) {
+        // Session expired during authenticated session — redirect to login
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

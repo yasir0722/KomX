@@ -9,7 +9,6 @@ services:
     working_dir: /var/www
     volumes:
       - .:/var/www
-      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     ports:
       - "8000:80"
     depends_on:
@@ -21,6 +20,9 @@ services:
       - APP_ENV=local
       - DB_HOST=mysql
       - DB_PORT=3306
+      - DB_DATABASE=komx
+      - DB_USERNAME=komx
+      - DB_PASSWORD=secret
 
   # ─── MySQL Database ──────────────────────────────────────────────────
   mysql:

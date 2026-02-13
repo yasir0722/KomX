@@ -19,7 +19,13 @@ export const useAuthStore = defineStore('auth', () => {
       loading.value = true;
       const response = await api.get('/user');
       user.value = response.data.user;
-    } catch {
+    } catch (error) {
+      // 401 is expected when not authenticated - don't retry
+      if (error.response?.status === 401) {
+        user.value = null;
+      } else {
+        console.error('Failed to fetch user:', error);
+      }
       user.value = null;
     } finally {
       loading.value = false;

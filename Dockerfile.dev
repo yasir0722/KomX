@@ -21,14 +21,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy Nginx dev config
+# Copy application files
+COPY . /var/www
+
+# Copy configs
 COPY docker/nginx/default.conf /etc/nginx/sites-available/default
-
-# Copy Supervisor config
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Copy PHP ini
 COPY docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Expose port 80
 EXPOSE 80
